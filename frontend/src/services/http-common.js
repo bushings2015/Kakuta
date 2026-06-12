@@ -3,7 +3,7 @@ import axios from "axios";
 const getToken = () => localStorage.getItem('token');
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "https://kakutausa-1.onrender.com",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://kakuta.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
