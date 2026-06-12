@@ -9,11 +9,23 @@ const prisma = require('./config/db');
 const app = express();
 
 app.use(cookieParser());
+const allowedOrigins = [
+  "https://kakutausa.vercel.app",
+  "https://kakuta.vercel.app",
+  "http://localhost:5173", // สำหรับ dev
+];
+
 app.use(cors({
-  origin: "https://kakutausa.vercel.app",
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ limit: '20mb', extended: true }));
