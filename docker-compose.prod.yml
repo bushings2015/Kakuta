@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      target: prod
+    container_name: kakutausa-backend-prod
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - PORT=8081
+
+  frontend:
+    build:
+      context: ./frontend
+      target: prod
+      args:
+        - VITE_API_BASE_URL=${VITE_API_BASE_URL}
+    container_name: kakutausa-frontend-prod
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend

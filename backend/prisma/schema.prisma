@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Request3D {
+  id        Int      @id @default(autoincrement())
+  email     String
+  firstName String?
+  lastName  String?
+  message   String?
+  productId Int?
+  createdAt DateTime @default(now())
+  handled   Boolean  @default(false)
+  product   Product? @relation(fields: [productId], references: [id])
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String
+  products Product[]
+}
+
+model Product {
+  id          Int            @id @default(autoincrement())
+  name        String
+  details     String?
+  description String?
+  categoryId  Int
+  category    Category       @relation(fields: [categoryId], references: [id])
+  images      ProductImage[]
+  models      ProductModel[]
+  Request3D   Request3D[]
+  sizes       Size[]
+}
+
+model Size {
+  id                    Int     @id @default(autoincrement())
+  productId             Int
+  holdingCapacityMetric String?
+  weightMetric          String?
+  handleMovesMetric     String?
+  barMovesMetric        String?
+  drawingMovementMetric String?
+  holdingCapacityInch   String?
+  weightInch            String?
+  handleMovesInch       String?
+  barMovesInch          String?
+  drawingMovementInch   String?
+  product               Product @relation(fields: [productId], references: [id])
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  imageUrl  String?
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model ProductModel {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  gltfUrl   String?
+  binUrl    String?
+  stepUrl   String?
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model ContentType {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  contents Content[]
+}
+
+model Content {
+  id            Int         @id @default(autoincrement())
+  contentTypeId Int
+  language      String
+  title         String?
+  detail        String?
+  imageUrl      String?
+  isPublished   Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  contentType   ContentType @relation(fields: [contentTypeId], references: [id])
+}
+
+model AddressType {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  addresses Address[]
+}
+
+model Address {
+  id            Int         @id @default(autoincrement())
+  addressTypeId Int
+  address       String
+  phone1        String?
+  phone2        String?
+  email         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  addressType   AddressType @relation(fields: [addressTypeId], references: [id])
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  email    String @unique
+  password String
+  role     Role   @default(USER)
+}
+
+enum Role {
+  ADMIN
+  USER
+}

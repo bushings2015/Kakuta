@@ -1,0 +1,35 @@
+category
+  -name
+
+products 
+  -name
+  -details
+  -description
+    -catid
+
+size
+  -proid
+  -holding-capacity
+  -weight
+  -handle-moves
+  -bar-moves
+
+pro-image
+  -proid
+  -gilt
+  -bin
+
+content-type
+  - name 
+content
+  - con-type
+  - detail
+
+address-type
+  - name
+address
+  -add-type
+  -address
+  -phone1
+  -phone2
+  -email
